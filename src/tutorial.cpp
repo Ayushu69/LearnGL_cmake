@@ -71,6 +71,7 @@ int main() {
 	if (!success) {
 		glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
 		std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
+		glDeleteShader(vertexShader);
 	}
 
 	//FRAGMENT SHADER
@@ -84,6 +85,7 @@ int main() {
 	if (!success) {
 		glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
 		std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
+		glDeleteShader(fragmentShader);
 	}
 
 	//Link shaders
@@ -97,6 +99,7 @@ int main() {
 	if (!success) {
 		glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
 		std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
+		glDeleteProgram(shaderProgram);
 	}
 
 	glDeleteShader(vertexShader);
@@ -108,10 +111,10 @@ int main() {
 		 0.5f, -0.5f, 0.0f, 
 		 0.0f,  0.5f, 0.0f
 	};
-	unsigned int indices[] = {
-		0, 1, 2, // first triangle
-		3, 4, 5  // second triangle
-	};
+	//unsigned int indices[] = {
+	//	0, 1, 2, // first triangle
+	//	3, 4, 5  // second triangle
+	//};
 
 	//generate and bind a vertex buffer object (VBO)
 	unsigned int VBO, VAO;
@@ -119,6 +122,7 @@ int main() {
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
 	//glGenBuffers(1, &EBO);
+
 	//bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
 	glBindVertexArray(VAO);
 

@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.15)
 project(LearnGL C CXX)
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # GLFW: downloaded + built for you
 include(FetchContent)
@@ -14,12 +15,22 @@ FetchContent_MakeAvailable(glfw)
 add_library(glad deps/glad/src/glad.c)
 target_include_directories(glad PUBLIC deps/glad/include)
 
+# Shader class
+add_library(shader src/shaders.cpp)
+target_include_directories(shader PUBLIC src)
+target_link_libraries(shader PUBLIC glad)
+
 # one line per demo
 function(add_demo name)
-    add_executable(${name} src/${name}.cpp)
-    target_link_libraries(${name} glad glfw)
+  add_executable(${name} src/${name}.cpp)
+  target_link_libraries(${name} PRIVATE shader glfw glad)
+
+  add_custom_command(TARGET ${name} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    ${CMAKE_SOURCE_DIR}/shaders $<TARGET_FILE_DIR:${name}>/shaders)
 endfunction()
 
-add_demo(tutorial)
+
+#add_demo(tutorial)
 add_demo(practice_hello_tri)
-#add_demo(shaders)
+add_demo(shaders_tutorial)
