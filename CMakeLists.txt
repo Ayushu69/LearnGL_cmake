@@ -20,14 +20,16 @@ add_library(shader src/shaders.cpp)
 target_include_directories(shader PUBLIC src)
 target_link_libraries(shader PUBLIC glad)
 
+# copy shaders next to the exes, on every build
+add_custom_target(copy_shaders ALL
+  COMMAND ${CMAKE_COMMAND} -E copy_directory
+  ${CMAKE_SOURCE_DIR}/shaders ${CMAKE_BINARY_DIR}/shaders)
+
 # one line per demo
 function(add_demo name)
   add_executable(${name} src/${name}.cpp)
   target_link_libraries(${name} PRIVATE shader glfw glad)
-
-  add_custom_command(TARGET ${name} POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory
-    ${CMAKE_SOURCE_DIR}/shaders $<TARGET_FILE_DIR:${name}>/shaders)
+  add_dependencies(${name} copy_shaders)
 endfunction()
 
 

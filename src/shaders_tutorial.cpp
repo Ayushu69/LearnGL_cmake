@@ -42,6 +42,8 @@ int main() {
 		return -1;
 	}
 
+	float offset = 0.5f;
+
 	Shader ourShader("shaders/shader.vert", "shaders/shader.frag");
 
 	float vertices[] = {
@@ -76,6 +78,7 @@ int main() {
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		ourShader.use(); //be sure to activate the shader before any calls to glUniform
+		ourShader.setFloat("xOffset", offset);
 
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
